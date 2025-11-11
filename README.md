@@ -1,5 +1,5 @@
 
-# KnowPilot: A Human-Centered, Knowledge-Augmented Agent System for Private Domains
+# KnowPilot: Your Knowledge-Driven Copilot for Domain Tasks
 
 KnowPilot is an agent system designed for private domains, combining human-centered design with knowledge augmentation. It features a modern frontend, robust backend, and seamless AI integration for document management, knowledge retrieval, and collaborative writing.
 
@@ -118,4 +118,5 @@ git clone https://github.com/XeeKee/KnowPilot.git
 
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
 
