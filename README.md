@@ -1,7 +1,7 @@
 
-# KnowMate: A Human-Centered, Knowledge-Augmented Agent System for Private Domains
+# KnowPilot: A Human-Centered, Knowledge-Augmented Agent System for Private Domains
 
-KnowMate is an agent system designed for private domains, combining human-centered design with knowledge augmentation. It features a modern frontend, robust backend, and seamless AI integration for document management, knowledge retrieval, and collaborative writing.
+KnowPilot is an agent system designed for private domains, combining human-centered design with knowledge augmentation. It features a modern frontend, robust backend, and seamless AI integration for document management, knowledge retrieval, and collaborative writing.
 
 ---
 
@@ -11,7 +11,7 @@ KnowMate is an agent system designed for private domains, combining human-center
 - Install Docker
 - Clone this repository:
 ```bash
-git clone https://github.com/XeeKee/OmniThink-C.git
+git clone https://github.com/XeeKee/KnowPilot.git
 ```
 
 ### One-Click Startup
@@ -81,8 +81,8 @@ git clone https://github.com/XeeKee/OmniThink-C.git
 | Variable         | Description                  | Required | Example                |
 |------------------|-----------------------------|----------|------------------------|
 | SECRET_KEY       | Flask app secret key        | Yes      | `your_secret_key_here` |
-| POSTGRES_DB      | Database name               | Yes      | `knowmate`             |
-| POSTGRES_USER    | Database username           | Yes      | `knowmate_user`        |
+| POSTGRES_DB      | Database name               | Yes      | `KnowPilot`             |
+| POSTGRES_USER    | Database username           | Yes      | `KnowPilot_user`        |
 | POSTGRES_PASSWORD| Database password           | Yes      | `your_password`        |
 | MODEL_API_KEY    | Volcano Engine API key      | Yes      | `your_api_key`         |
 | SEARCH_API_KEY   | Search API key              | No       | `your_search_key`      |
@@ -116,5 +116,6 @@ git clone https://github.com/XeeKee/OmniThink-C.git
 ---
 
 ## 📄 License
+
 
 This project is licensed under the MIT License. See the LICENSE file for details.
