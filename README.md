@@ -18,7 +18,6 @@ git clone https://github.com/XeeKee/KnowPilot.git
 
 1. **Prepare Environment Variables**
    ```bash
-   cd CollabThink-Re/CollabThink
    cp docker/env.example docker/.env
    # Edit docker/.env and fill in the following:
    # - SECRET_KEY (application secret, use a long random string)
@@ -119,3 +118,4 @@ git clone https://github.com/XeeKee/KnowPilot.git
 
 
 This project is licensed under the MIT License. See the LICENSE file for details.
+
