@@ -1,0 +1,11 @@
+# Base Image: Use lightweight and efficient Nginx Alpine version
+FROM nginx:alpine
+
+# Copy your frontend static resources (build artifacts) to Nginx's default web root directory
+COPY front_end_re/ /usr/share/nginx/html/
+
+# Copy custom Nginx configuration file to override default configuration
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose HTTP port for Nginx service
+EXPOSE 80

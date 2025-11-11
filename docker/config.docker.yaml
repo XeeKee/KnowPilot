@@ -1,0 +1,67 @@
+# Copy the complete content of existing src_re/config.yaml here, and make only necessary adjustments:
+# - database.host: "db"
+# - Use environment variable placeholders (such as ${SECRET_KEY}, ${POSTGRES_USER}), injected by docker/.env
+
+flask:
+  static_folder: "../front_end_re"
+  static_url_path: "/static"
+  template_folder: "../front_end_re"
+
+app:
+  name: "KnowMate"
+  debug: false
+  host: "0.0.0.0"
+  port: 5000
+  secret_key: ""
+  permanent_session_lifetime: 604800
+  SESSION_COOKIE_HTTPONLY: true
+  SESSION_COOKIE_SAMESITE: "Lax"
+  SESSION_COOKIE_SECURE: false
+
+model:
+  type: "VolcEngine"
+  name: "deepseek-v3-250324"
+  api_key: ""
+  base_url: "https://ark.cn-beijing.volces.com/api/v3"
+  max_tokens: 4096
+  temperature: 0.7
+  top_p: 0.7
+  outlineType: "default"
+
+search:
+  api_key: ""
+  top_k: 5
+  search_engine: "bing"
+  debug: true
+  scene: "dolphin_search_google_nlp"
+  page: 1
+  custom_config_info:
+    multiSearch: false
+    qpMultiQuery: false
+    qpMultiQueryHistory: []
+    qpSpellcheck: false
+    qpEmbedding: false
+    knnWithScript: false
+    qpTermsWeight: false
+    pluginServiceConfig:
+      qp: "mvp_search_qp_qwen"
+  api_endpoint: "http://101.37.167.147/gw/v1/api/msearch-sp/qwen-search"
+  max_retries: 5
+  retry_delay: 2
+
+logging:
+  level: "INFO"
+  file: "app.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+
+database:
+  host: "db"
+  port: 5432
+  database: ""
+  username: ""
+  password: ""
+  pool_size: 10
+  max_overflow: 20
+  pool_timeout: 30
+  pool_recycle: 3600
+  echo: false

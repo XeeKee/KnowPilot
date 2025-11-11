@@ -1,0 +1,84 @@
+services:
+  # Backend Flask service
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: collabthink-backend
+    restart: unless-stopped
+    env_file:
+      - ./.env # Load environment variables from .env file (relative to compose file directory)
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - ARK_API_KEY=${MODEL_API_KEY}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      # Production/Default: Don't mount entire src_re to avoid overriding config.yaml in container
+      # For development hot reload, create docker-compose.override.yml and mount directories
+      # Explicitly mount config file to ensure using Docker-specific configuration
+      - ./config.docker.yaml:/app/src_re/config.yaml:ro
+      # Allow backend to directly render templates (login.html/chat.html etc.)
+      - ../front_end_re:/app/front_end_re:ro
+      # Mount model files (large size, avoid packaging into image; read-only)
+      - ../paraphrase-MiniLM-L6-v2:/app/paraphrase-MiniLM-L6-v2:ro
+      # Mount logs directory
+      - ../logs:/app/logs
+      # (Optional) Data directory
+      - ../data:/app/data
+      # Private library/vector library persistence directory
+      - ../private_chroma_stores:/app/private_chroma_stores
+    ports:
+      - "5000:5000"
+    depends_on:
+      db:
+        condition: service_healthy # Ensure database is healthy before starting backend
+    command: ["python", "src_re/app.py"]
+    networks:
+      - collabthink-net
+
+  # Frontend Nginx service
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: collabthink-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80" # Map host port 80 to container port 80
+    depends_on:
+      - backend
+    volumes:
+      # Development mode: Mount frontend code for real-time updates (read-only)
+      - ../front_end_re:/usr/share/nginx/html:ro
+    networks:
+      - collabthink-net
+
+  # PostgreSQL database service
+  db:
+    image: postgres:15
+    container_name: collabthink-db
+    restart: unless-stopped
+    env_file:
+      - ./.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - collabthink-net
+
+networks:
+  collabthink-net:
+    driver: bridge
+
+volumes:
+  postgres_data:

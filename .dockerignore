@@ -1,0 +1,21 @@
+# Git
+.git
+.gitignore
+
+# Python
+.venv
+venv
+*.pyc
+__pycache__/
+*.egg-info
+
+# IDE / OS
+.idea/
+.vscode/
+*.DS_Store
+*.swp
+
+# Logs and Data (mounted via volume, should not be included in the image)
+logs/
+data/
+paraphrase-MiniLM-L6-v2/

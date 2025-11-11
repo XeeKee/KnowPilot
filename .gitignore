@@ -1,0 +1,176 @@
+# --------------------
+# Python 相关忽略
+# --------------------
+# 忽略 Python 虚拟环境目录，确保只通过 requirements.txt 共享依赖。
+# 你项目中的 'knowmate_env' 目录，这是一个虚拟环境，必须忽略。
+knowmate_env/
+
+# 如果项目有其他的虚拟环境目录，也一并忽略
+.venv/
+env/
+venv/
+
+# 忽略 Python 字节码文件，这些文件是运行时自动生成的。
+CollabThink/src_re/*/__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# 忽略项目依赖的安装包。
+*.egg-info/
+.eggs/
+build/
+develop-eggs/
+dist/
+downloads/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+
+# 忽略 Python 环境变量配置文件，通常包含敏感信息或本地配置。
+.env
+.flaskenv
+
+# --------------------
+# NLP 模型和数据相关忽略
+# --------------------
+# 忽略大型 NLP 模型文件。你提供的截图显示 'paraphrase-MiniLM-L6-v2' 是一个目录。
+# 这个目录包含了模型权重（如 pytorch_model.bin），这些文件通常非常大，
+# 不适合通过 Git 进行版本控制。
+paraphrase-MiniLM-L6-v2/
+
+# 忽略私有向量或大型数据文件，这些通常不适合 Git 版本控制。
+# 'private_vectors_...' 目录中的文件可能很大。
+private_vectors_*/
+
+
+# 配置
+# 忽略其他可能的数据文件，这些文件不应该被版本控制。
+# 比如 CSV、JSON 等数据文件，如果你只想保留代码和模型，这些数据文件也应忽略。
+# 如果你希望忽略整个 data 目录，可以这么写：
+# data/
+
+# --------------------
+# 前端相关忽略
+# --------------------
+# 你的项目是原生 JS，但如果未来你使用构建工具，这些目录也应该忽略。
+# 例如：Webpack 或 Rollup 的构建输出
+build/
+dist/
+
+# 如果你使用了 npm，这个目录会非常大。
+node_modules/
+
+# --------------------
+# 系统和编辑器相关忽略
+# --------------------
+# 忽略 macOS 系统的文件
+.DS_Store
+
+# 忽略 VS Code 的本地配置，通常包含个人偏好设置。
+.vscode/
+
+# 忽略 PyCharm 的配置
+.idea/
+
+# 忽略日志和临时文件
+*.log
+npm-debug.log*
+
+# 忽略备份或临时文件
+*~
+*.tmp
+
+# --------------------
+# 配置文件和敏感信息
+# --------------------
+# 配置文件可能包含敏感信息（API密钥等），应该忽略
+
+src_re/config.yaml
+config.yaml
+
+# 如果有本地环境变量文件
+config.local.yaml
+*.local.yaml
+*.secret.yaml
+
+# --------------------
+# 数据库和存储文件
+# --------------------
+# 忽略 ChromaDB 数据库文件
+*.sqlite3
+*.db
+
+# 忽略向量存储目录 - 包含大型二进制文件和数据库
+vector_stores/
+
+# --------------------
+# 日志文件
+# --------------------
+# 应用日志文件
+app.log
+*.log
+
+
+
+# --------------------
+# Excel 和文档文件（如果是测试数据）
+# --------------------
+# 测试用的 Excel 文件
+*.xlsx
+*.xls
+
+# --------------------
+# 机器学习和AI相关
+# --------------------
+# 模型文件
+*.bin
+*.onnx
+*.pb
+*.h5
+*.safetensors
+
+# 数据集文件
+*.csv
+*.parquet
+*.hdf5
+
+# 缓存文件
+.cache/
+cache/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# --------------------
+# 操作系统相关
+# --------------------
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Linux
+*~
+
+# 临时文件
+*.swp
+*.swo
+*~
+
+
+# 压缩文件
+*.zip
+*.tar.gz
+*.rar
+
+# start_with_config.sh
+start_with_config.sh
+
+private_chroma_stores/
+
+# 向量存储目录 - 包含二进制数据库文件

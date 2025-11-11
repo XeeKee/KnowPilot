@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <!-- ===== META TAGS AND TITLE ===== -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration - KnowPilot</title>
+    <link rel="stylesheet" href="auth.css">
+    
+    <!-- ===== INLINE STYLES ===== -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .auth-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .auth-title {
+            color: #333;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .auth-subtitle {
+            color: #666;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .password-requirements {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .auth-link {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .auth-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #fed7d7;
+            font-size: 14px;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fff4;
+            color: #38a169;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #9ae6b4;
+            font-size: 14px;
+            display: none;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 480px) {
+            .auth-container {
+                margin: 10px;
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Join KnowPilot and start your intelligent writing journey</p>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <form id="registerForm" novalidate>
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="form-input" 
+                    placeholder="Please enter your email address"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-input" 
+                    placeholder="Please enter your password"
+                    required
+                    autocomplete="new-password"
+                    minlength="6"
+                >
+                <div class="password-requirements">
+                    Password must be at least 6 characters, should include letters, numbers, and special characters
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword" class="form-label">Confirm Password</label>
+                <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword" 
+                    class="form-input" 
+                    placeholder="Please enter your password again"
+                    required
+                    autocomplete="new-password"
+                >
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">
+                <span id="submitText">Register Account</span>
+                <span id="loadingSpinner" class="loading-spinner hidden"></span>
+            </button>
+        </form>
+
+        <div class="auth-link">
+            Already have an account? <a href="login.html">Login now</a>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        console.log('[Register] Page loaded successfully');
+
+        class RegisterPage {
+            constructor() {
+                this.form = document.getElementById('registerForm');
+                this.emailInput = document.getElementById('email');
+                this.passwordInput = document.getElementById('password');
+                this.confirmPasswordInput = document.getElementById('confirmPassword');
+                this.submitBtn = document.getElementById('submitBtn');
+                this.submitText = document.getElementById('submitText');
+                this.loadingSpinner = document.getElementById('loadingSpinner');
+                this.errorMessage = document.getElementById('errorMessage');
+                this.successMessage = document.getElementById('successMessage');
+
+                this.initEventListeners();
+                console.log('[Register] Registration page initialized successfully');
+            }
+
+            initEventListeners() {
+                this.form.addEventListener('submit', this.handleSubmit.bind(this));
+                this.confirmPasswordInput.addEventListener('input', this.validatePasswordMatch.bind(this));
+                this.passwordInput.addEventListener('input', this.validatePasswordMatch.bind(this));
+            }
+
+            validatePasswordMatch() {
+                const password = this.passwordInput.value;
+                const confirmPassword = this.confirmPasswordInput.value;
+                
+                if (confirmPassword && password !== confirmPassword) {
+                    this.confirmPasswordInput.setCustomValidity('Passwords do not match');
+                } else {
+                    this.confirmPasswordInput.setCustomValidity('');
+                }
+            }
+
+            validateEmail(email) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                return emailRegex.test(email);
+            }
+
+            showError(message) {
+                this.errorMessage.textContent = message;
+                this.errorMessage.style.display = 'block';
+                this.successMessage.style.display = 'none';
+                console.error('[Register] Error:', message);
+            }
+
+            showSuccess(message) {
+                this.successMessage.textContent = message;
+                this.successMessage.style.display = 'block';
+                this.errorMessage.style.display = 'none';
+                console.log('[Register] Success:', message);
+            }
+
+            hideMessages() {
+                this.errorMessage.style.display = 'none';
+                this.successMessage.style.display = 'none';
+            }
+
+            setLoading(loading) {
+                this.submitBtn.disabled = loading;
+                if (loading) {
+                    this.submitText.textContent = 'Registering...';
+                    this.loadingSpinner.classList.remove('hidden');
+                } else {
+                    this.submitText.textContent = 'Register Account';
+                    this.loadingSpinner.classList.add('hidden');
+                }
+            }
+
+            async handleSubmit(e) {
+                e.preventDefault();
+                console.log('[Register] Starting registration form submission');
+
+                this.hideMessages();
+
+                const email = this.emailInput.value.trim();
+                const password = this.passwordInput.value;
+                const confirmPassword = this.confirmPasswordInput.value;
+
+                // Frontend validation
+                if (!email || !password || !confirmPassword) {
+                    this.showError('Please fill in all required fields');
+                    return;
+                }
+
+                if (!this.validateEmail(email)) {
+                    this.showError('Please enter a valid email address');
+                    return;
+                }
+
+                if (password.length < 6) {
+                    this.showError('Password must be at least 6 characters');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    this.showError('The passwords you entered do not match');
+                    return;
+                }
+
+                this.setLoading(true);
+
+                try {
+                    console.log('[Register] Sending registration request:', { email });
+                    
+                    const response = await fetch('/api/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            email: email,
+                            password: password
+                        })
+                    });
+
+                    const data = await response.json();
+                    console.log('[Register] Server response:', data);
+
+                    if (response.ok) {
+                        this.showSuccess('Registration successful! Redirecting to login page...');
+                        console.log('[Register] Registration successful, redirecting to login page in 3 seconds');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'login.html';
+                        }, 2000);
+                    } else {
+                        this.showError(data.error || 'Registration failed, please try again');
+                    }
+                } catch (error) {
+                    console.error('[Register] Registration request failed:', error);
+                    this.showError('Network error, please check your connection and try again');
+                } finally {
+                    this.setLoading(false);
+                }
+            }
+        }
+
+        // ===== PAGE INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', () => {
+            new RegisterPage();
+        });
+    </script>
+</body>
+</html>

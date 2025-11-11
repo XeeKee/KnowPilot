@@ -1,0 +1,41 @@
+# Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-Login
+
+# AI/ML Related
+openai==1.99.5
+httpx==0.28.1
+langchain==0.3.27
+langchain-community==0.3.27
+langchain-huggingface==0.3.1
+langsmith==0.4.13
+sentence-transformers==5.1.0
+transformers==4.55.0
+torch==2.8.0
+numpy==2.2.6
+
+# Vector Database
+chromadb==0.4.15
+
+# Document Processing
+python-docx==0.8.11
+PyPDF2==3.0.1
+openpyxl==3.1.2
+pandas==2.3.1
+scikit-learn==1.7.1
+
+# Database Related
+psycopg2-binary==2.9.10
+SQLAlchemy==2.0.42
+alembic==1.16.4
+
+# Utility Libraries
+requests==2.31.0
+PyYAML==6.0.2
+dspy-ai==2.6.27
+
+# Essential Dependencies
+pydantic==2.11.7
+pydantic-settings==2.10.1
+python-dotenv==1.1.1

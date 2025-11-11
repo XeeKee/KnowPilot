@@ -1,0 +1,42 @@
+# Base Image: Use lightweight Python 3.11 slim version
+FROM python:3.11-slim
+
+# Set environment variables to prevent .pyc file generation and allow direct log output
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Update package manager and install system dependencies
+# gcc: for compiling some Python packages
+# libpq-dev: for psycopg2 (PostgreSQL driver)
+# RUN apt-get update && apt-get install -y --no-install-recommends \
+#     gcc \
+#     libpq-dev \
+#     && rm -rf /var/lib/apt/lists/*
+RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debian.sources \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+       gcc \
+       libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+# Set working directory
+WORKDIR /app
+
+# To leverage Docker's layer caching mechanism, first copy only your dependency files
+# Assuming your requirements.txt is in the project root directory
+COPY requirements.txt /app/requirements.txt
+
+# When installing Python dependencies, use -i parameter to specify Tsinghua University mirror source for significantly improved download speed
+RUN pip install --no-cache-dir -r /app/requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# Copy your backend source code
+COPY src_re/ /app/src_re/
+
+# Default copy docker-specific configuration as config.yaml in container (effective in production image)
+COPY docker/config.docker.yaml /app/src_re/config.yaml
+
+# Expose backend service port
+EXPOSE 5000
+
+# Container startup command (recommend using Gunicorn in production environment)
+# Please ensure your app.py can be started this way
+CMD ["python", "src_re/app.py"]

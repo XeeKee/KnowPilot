@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ===== META TAGS AND SEO ===== -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>KnowPilot</title>
+
+    <!-- ===== STYLESHEETS ===== -->
+    <!-- Custom CSS -->
+    <link href="/static/chat.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- ===== TOP NAVIGATION BAR ===== -->
+    <div id="top-navbar">
+        <div class="navbar-container">
+            <div class="navbar-left">
+                <button class="sidebar-toggle" id="sidebar-toggle" >
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="navbar-logo">
+                    <a href="#">KnowPilot</a>
+                </div>
+            </div>
+            <div class="navbar-menu">
+
+                <!-- ===== AUTHENTICATION MENU ===== -->
+                <div id="auth-menu" class="auth-menu">
+                    <!-- Unauthenticated state -->
+                    <div id="unauthenticated-menu" class="auth-state" style="display: none;">
+                        <ul>
+                            <li><a href="login.html" class="login-btn">Login</a></li>
+                            <li><a href="register.html" class="register-btn">Register</a></li>
+                        </ul>
+                    </div>
+                    
+
+                    <!-- Authenticated state -->
+                    <div id="authenticated-menu" class="auth-state" style="display: none;">
+                        <div class="user-menu">
+                            <div class="user-info">
+                                <span class="user-email" id="current-user-email">user@example.com</span>
+                                <div class="user-dropdown">
+                                    <button class="dropdown-toggle" id="user-dropdown-toggle">
+                                        <span class="user-avatar">👤</span>
+                                        <span class="dropdown-arrow">▼</span>
+                                    </button>
+                                    <div class="dropdown-menu" id="user-dropdown-menu">
+                                        <a href="#" id="switch-user-btn" class="dropdown-item">Switch Account</a>
+                                        <a href="#" id="user-settings-btn" class="dropdown-item">User Settings</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" id="logout-btn" class="dropdown-item logout">Logout</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ===== REGULAR MENU ITEMS ===== -->
+                <ul class="regular-menu">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Bug Report</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>                
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN LAYOUT WRAPPER ===== -->
+    <div id="wrapper">
+
+        <!-- ===== SIDEBAR NAVIGATION ===== -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="new-session-btn">
+                    <a href="#" onclick="location.reload(); return false;">
+                        &nbsp + &nbsp;New Task
+                    </a>
+                </li>
+                <li class="discover-btn">
+                    <a href="#" onclick="openFileDialog(); return false;">
+                        &nbsp + &nbsp;Knowledge Base
+                    </a>
+                </li>
+                <li class="sidebar-brand">
+                    <a href="#">
+                        ▣ &nbsp;OUTLINES
+                    </a>
+                    <button class="history-btn" title="View History Outlines">HISTORY</button>
+                </li>
+                <li class="outline-divider"></li>
+                <!-- Outline content will be dynamically added here -->
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <div id="main-content">
+
+        <div id="main-content-wrapper">
+
+            <!-- ===== MAIN CONTENT HEADER ===== -->
+            <div id="main-content-header">
+                <h1 class="main-title">Knowledge-Driven Copilot, You Lead.</h1>
+            </div>
+
+            <!-- ===== CHAT INTERFACE ===== -->
+            <div class="chat-container">
+                <div class="chat-box">
+                    <div class="chat-messages">
+                        <!-- Message content will be dynamically added here -->
+                    </div>
+                    <div class="chat-input-area">
+                        <textarea class="chat-input" placeholder="Input your topic here..."></textarea>
+                        <button class="private-library">🌐</button>
+                        <button class="send-button">↑</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ===== EXAMPLE BLOCKS ===== -->
+        <div class="example-blocks-container">
+            <div class="example-block" data-type="occasional-research">
+                <div class="block-header">
+                    <h3>🐟 Oceanography Research</h3>
+                </div>
+            </div>
+
+            <div class="example-block" data-type="excel-report">
+                <div class="block-header">
+                    <h3>📊 Excel Report</h3>
+                </div>
+            </div>
+
+            <!-- Line break -->
+            <div class="flex-break"></div>
+
+            <div class="example-block" data-type="research-homework">
+                <div class="block-header">
+                    <h3>✅Industrial Report</h3>
+                </div>
+            </div>
+
+            
+
+            <div class="example-block">
+                <div class="block-header">
+                    <h3>😊 Coming Soon...........</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+    <!-- ===== HIDDEN DATA ===== -->
+    <!-- Hidden outline data -->
+    <input type="hidden" id="outlineData" value="">
+
+    <!-- ===== FILE UPLOAD DIALOG ===== -->
+    <!-- File upload dialog -->
+    <div id="file-upload-dialog" class="file-upload-overlay" style="display: none;">
+        <div class="file-upload-dialog" style="
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 28px;
+            max-width: 550px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            animation: slideIn 0.3s ease;
+        ">
+            <div style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 24px;
+                padding-bottom: 16px;
+                border-bottom: 1px solid #f1f3f4;
+            ">
+                <h3 style="
+                    margin: 0;
+                    color: #212529;
+                    font-size: 20px;
+                    font-weight: 600;
+                    letter-spacing: -0.025em;
+                ">Knowledge Base</h3>
+                <button onclick="closeFileDialog()" style="
+                    background: none;
+                    border: none;
+                    color: #6c757d;
+                    cursor: pointer;
+                    font-size: 24px;
+                    padding: 4px;
+                    border-radius: 6px;
+                    transition: all 0.2s ease;
+                " onmouseover="this.style.color='#495057'; this.style.backgroundColor='#f8f9fa'" 
+                   onmouseout="this.style.color='#6c757d'; this.style.backgroundColor='transparent'">×</button>
+            </div>
+            <div style="margin-bottom: 20px;">
+                <div class="upload-area" id="upload-area" style="
+                    border: 1px dashed #ced4da;
+                    border-radius: 8px;
+                    padding: 30px;
+                    text-align: center;
+                    background-color: #f8f9fa;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    margin-bottom: 20px;
+                ">
+                <div class="upload-placeholder">
+                    <div class="upload-icon" style="font-size: 40px; margin-bottom: 15px;">📄</div>
+                    <p style="margin: 10px 0; color: #495057; font-size: 16px;">Click or drag files here</p>
+                    <p class="file-types" style="font-size: 14px; color: #6c757d;">Supports Excel (.xlsx, .xls), PDF (.pdf), Word (.docx, .doc)</p>
+                    <p class="file-note" style="font-size: 13px; color: #495057; font-weight: 500; margin-top: 10px;">✨ Full text extraction for .docx, .pdf, and Excel files</p>
+                </div>
+                    <input type="file" id="file-input" accept=".xlsx,.xls,.pdf,.docx,.doc" multiple
+                        style="display: none;">
+                </div>
+                <div class="uploaded-files" id="uploaded-files"></div>
+            </div>
+            <div style="
+                display: flex;
+                gap: 12px;
+                justify-content: flex-end;
+            ">
+                <button 
+                    onclick="closeFileDialog()" 
+                    style="
+                        padding: 10px 20px;
+                        background: #6c757d;
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 500;
+                        transition: all 0.2s ease;
+                    "
+                    onmouseover="this.style.backgroundColor='#5a6268'"
+                    onmouseout="this.style.backgroundColor='#6c757d'"
+                >Cancel</button>
+                <button 
+                    onclick="processAndSendFiles()" 
+                    id="send-files-btn"
+                    disabled
+                    style="
+                        padding: 10px 20px;
+                        background: #495057;
+                        color: white;
+                        border: none;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        font-weight: 600;
+                        transition: all 0.2s ease;
+                    "
+                    onmouseover="this.style.backgroundColor='#343a40'"
+                    onmouseout="this.style.backgroundColor='#495057'"
+                >Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Sortable library -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
+    <!-- Import mammoth.js for Word document parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+
+    <!-- Import PDF.js for PDF parsing -->
+    <script src="/static/libs/pdf.min.js"></script>
+
+    <!-- Import Sheet.JS for Excel parsing -->
+    <script src="/static/libs/xlsx.full.min.js"></script>
+
+    <!-- Import demo configuration -->
+    <script src="/static/data/demo_content.js"></script>
+
+    <!-- Import authentication system -->
+    <script src="/static/auth.js"></script>
+
+    <!-- Import common article utilities -->
+    <script src="/static/article_utils.js"></script>
+    
+    <!-- Import reference tooltips utilities -->
+    <script src="/static/reference_tooltips.js"></script>
+    
+    <!-- Import send_topic.js -->
+    <script src="/static/send_topic.js"></script>
+
+    <!-- Import generate_article.js -->
+    <script src="/static/generate_article.js"></script>
+
+    <!-- Import private_library.js -->
+    <script src="/static/private_library.js"></script>
+
+    <!-- Import history_outline.js -->
+    <script src="/static/history_outline.js"></script>
+
+    <!-- Import debug status component -->
+    <script src="/static/debug_status.js"></script>
+
+    <!-- Import navbar.js -->
+    <script src="/static/navbar.js"></script>
+
+    <!-- Authentication and UI management script -->
+    <script>
+        console.log('[Chat] 主页面脚本加载中...');
+
+        class ChatAuthManager {
+            constructor() {
+                this.authMenu = document.getElementById('auth-menu');
+                this.unauthenticatedMenu = document.getElementById('unauthenticated-menu');
+                this.authenticatedMenu = document.getElementById('authenticated-menu');
+                this.currentUserEmail = document.getElementById('current-user-email');
+                this.userDropdownToggle = document.getElementById('user-dropdown-toggle');
+                this.userDropdownMenu = document.getElementById('user-dropdown-menu');
+                this.logoutBtn = document.getElementById('logout-btn');
+                this.switchUserBtn = document.getElementById('switch-user-btn');
+                
+                this.initEventListeners();
+                this.updateAuthUI();
+                
+                console.log('[Chat] 认证管理器初始化完成');
+            }
+
+            initEventListeners() {
+                if (this.logoutBtn) {
+                    this.logoutBtn.addEventListener('click', this.handleLogout.bind(this));
+                }
+
+                if (this.switchUserBtn) {
+                    this.switchUserBtn.addEventListener('click', this.handleSwitchUser.bind(this));
+                }
+
+                if (this.userDropdownToggle) {
+                    this.userDropdownToggle.addEventListener('click', this.toggleUserDropdown.bind(this));
+                }
+
+                document.addEventListener('click', (e) => {
+                    if (!this.userDropdownToggle?.contains(e.target) && 
+                        !this.userDropdownMenu?.contains(e.target)) {
+                        this.closeUserDropdown();
+                    }
+                });
+
+                window.addEventListener('auth-status-changed', this.updateAuthUI.bind(this));
+            }
+
+            async updateAuthUI() {
+                try {
+                    console.log('[Chat] 更新认证UI状态...');
+                    
+                    if (!window.authManager) {
+                        console.warn('[Chat] AuthManager未就绪，稍后重试...');
+                        setTimeout(() => this.updateAuthUI(), 100);
+                        return;
+                    }
+
+                    const isAuthenticated = await window.authManager.checkAuthStatus();
+                    
+                    if (isAuthenticated && window.authManager.currentUser) {
+                        this.showAuthenticatedState(window.authManager.currentUser);
+                        this.enableFeatures();
+                    } else {
+                        this.showUnauthenticatedState();
+                        this.disableFeatures();
+                    }
+                    
+                    console.log('[Chat] 认证UI状态更新完成');
+                } catch (error) {
+                    console.error('[Chat] 更新认证UI失败:', error);
+                }
+            }
+
+            showAuthenticatedState(user) {
+                if (this.unauthenticatedMenu) {
+                    this.unauthenticatedMenu.style.display = 'none';
+                }
+                if (this.authenticatedMenu) {
+                    this.authenticatedMenu.style.display = 'block';
+                }
+                if (this.currentUserEmail) {
+                    this.currentUserEmail.textContent = user.email;
+                }
+                console.log('[Chat] 显示已登录状态:', user.email);
+            }
+
+            showUnauthenticatedState() {
+                if (this.authenticatedMenu) {
+                    this.authenticatedMenu.style.display = 'none';
+                }
+                if (this.unauthenticatedMenu) {
+                    this.unauthenticatedMenu.style.display = 'block';
+                }
+                console.log('[Chat] 显示未登录状态');
+            }
+
+            enableFeatures() {
+                const featureElements = [
+                    '.chat-input',
+                    '.send-button',
+                    '.private-library',
+                    '.new-session-btn',
+                    '.discover-btn',
+                    '.example-block'
+                ];
+
+                featureElements.forEach(selector => {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(el => {
+                        el.style.opacity = '1';
+                        el.style.pointerEvents = 'auto';
+                        el.removeAttribute('disabled');
+                        el.classList.remove('disabled');
+                    });
+                });
+
+                console.log('[Chat] 功能已启用');
+            }
+
+            disableFeatures() {
+                const featureElements = [
+                    '.chat-input',
+                    '.send-button',
+                    '.private-library',
+                    '.new-session-btn',
+                    '.discover-btn',
+                    '.example-block'
+                ];
+
+                featureElements.forEach(selector => {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(el => {
+                        el.style.opacity = '0.5';
+                        el.style.pointerEvents = 'none';
+                        el.setAttribute('disabled', 'true');
+                        el.classList.add('disabled');
+                    });
+                });
+
+                const chatInput = document.querySelector('.chat-input');
+                if (chatInput) {
+                    chatInput.placeholder = '请先登录以使用此功能...';
+                }
+
+                console.log('[Chat] 功能已禁用');
+            }
+
+            toggleUserDropdown() {
+                if (this.userDropdownMenu) {
+                    const isVisible = this.userDropdownMenu.style.display === 'block';
+                    this.userDropdownMenu.style.display = isVisible ? 'none' : 'block';
+                }
+            }
+
+            closeUserDropdown() {
+                if (this.userDropdownMenu) {
+                    this.userDropdownMenu.style.display = 'none';
+                }
+            }
+
+            async handleLogout(e) {
+                e.preventDefault();
+                
+                try {
+                    console.log('[Chat] 执行登出操作...');
+                    await window.authManager.logout();
+                } catch (error) {
+                    console.error('[Chat] 登出失败:', error);
+                    window.authManager.showAuthError('登出失败，请重试');
+                }
+            }
+
+            handleSwitchUser(e) {
+                e.preventDefault();
+                console.log('[Chat] 切换用户');
+                
+                this.handleLogout(e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('[Chat] DOM加载完成，初始化认证管理器');
+            
+            // Wait for authManager to complete loading
+            const initChatAuth = () => {
+                if (window.authManager) {
+                    new ChatAuthManager();
+                } else {
+                    console.log('[Chat] 等待AuthManager加载...');
+                    setTimeout(initChatAuth, 100);
+                }
+            };
+            
+            initChatAuth();
+            
+            // Sidebar toggle functionality
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const wrapper = document.getElementById('wrapper');
+
+            
+            if (sidebarToggle && sidebarOverlay && wrapper) {
+                
+                sidebarToggle.addEventListener('click', function() {
+                    wrapper.classList.add('sidebar-open');
+                });
+
+                sidebarOverlay.addEventListener('click', function() {
+                    wrapper.classList.remove('sidebar-open');
+                });
+                
+                window.autoExpandSidebar = function() {
+                    
+                    if (window.innerWidth <= 860) {
+                        wrapper.classList.add('sidebar-open');
+                    }
+                };
+                
+                window.autoCollapseSidebar = function() {
+                    if (window.innerWidth <= 860) {
+                        wrapper.classList.remove('sidebar-open');
+                    }
+                };
+                
+                window.addEventListener('resize', function() {
+                    if (window.innerWidth > 860) {
+                        wrapper.classList.remove('sidebar-open');
+                    }
+                });
+            }
+        });
+
+        console.log('[Chat] 主页面脚本加载完成');
+    </script>
+
+    <!-- Additional CSS for authentication UI and file upload dialog -->
+    <style>
+        /* File upload dialog styles */
+        .file-upload-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(33, 37, 41, 0.75);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(8px);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .file-upload-dialog .upload-area:hover {
+            border-color: #adb5bd;
+            background-color: #f1f3f5;
+        }
+        
+        .file-upload-dialog .upload-area.dragover {
+            border-color: #495057;
+            background-color: #e9ecef;
+        }
+        
+        .file-upload-dialog #send-files-btn:disabled {
+            background-color: #adb5bd;
+            opacity: 0.65;
+            cursor: not-allowed;
+        }
+        
+        /* Custom styles for file items */
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e9ecef;
+        }
+        
+        .file-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+            margin-right: 15px;
+        }
+        
+        .file-icon {
+            font-size: 18px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .file-details {
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+        }
+        
+        .file-name {
+            font-weight: 500;
+            color: #212529;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .file-size {
+            font-size: 12px;
+            color: #6c757d;
+            white-space: nowrap;
+        }
+        
+        .remove-file {
+            background: none;
+            border: none;
+            color: #dc3545;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .remove-file:hover {
+            background-color: #f8d7da;
+        }
+        
+        /* Custom scrollbar styles for file upload dialog - 模仿 regenerateDialog 的样式 */
+        #file-upload-dialog > .file-upload-dialog {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+        
+        #file-upload-dialog > .file-upload-dialog::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        #file-upload-dialog > .file-upload-dialog::-webkit-scrollbar-track {
+            background: transparent;
+            margin: 12px 0; 
+        }
+        
+        #file-upload-dialog > .file-upload-dialog::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 2px solid transparent;
+        }
+        
+        #file-upload-dialog > .file-upload-dialog::-webkit-scrollbar-thumb:hover {
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Authentication menu styles */
+        .navbar-menu {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .auth-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .regular-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 20px;
+        }
+
+        .regular-menu li a {
+            color: #333;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .regular-menu li a:hover {
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        /* Unauthenticated menu */
+        #unauthenticated-menu ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 10px;
+        }
+
+        .login-btn, .register-btn {
+            padding: 8px 16px !important;
+            border-radius: 6px !important;
+            text-decoration: none !important;
+            font-weight: 500 !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .login-btn {
+            color: #667eea !important;
+            border: 1px solid #667eea !important;
+        }
+
+        .login-btn:hover {
+            background: #667eea !important;
+            color: white !important;
+        }
+
+        .register-btn {
+            background: #667eea !important;
+            color: white !important;
+            border: 1px solid #667eea !important;
+        }
+
+        .register-btn:hover {
+            background: #5a67d8 !important;
+            border-color: #5a67d8 !important;
+        }
+
+        /* Authenticated menu */
+        .user-menu {
+            position: relative;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-email {
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-toggle:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .user-avatar {
+            font-size: 16px;
+        }
+
+        .dropdown-arrow {
+            font-size: 10px;
+            color: #666;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            z-index: 1000;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 10px 15px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+            background: #f8f9fa;
+        }
+
+        .dropdown-item.logout {
+            color: #dc3545;
+        }
+
+        .dropdown-item.logout:hover {
+            background: #fff5f5;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: #e1e5e9;
+            margin: 5px 0;
+        }
+
+        /* Disabled features styles */
+        .disabled {
+            opacity: 0.5 !important;
+            pointer-events: none !important;
+            cursor: not-allowed !important;
+        }
+
+        .chat-input:disabled {
+            background: #f8f9fa;
+            cursor: not-allowed;
+        }
+
+        /* Loading overlay for authentication */
+        .auth-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .auth-loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .navbar-menu {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .user-email {
+                display: none;
+            }
+
+            .dropdown-menu {
+                right: auto;
+                left: 0;
+            }
+        }
+    </style>
+
+    <!-- ===== END OF CHAT INTERFACE ===== -->
+</body>
+
+</html>
